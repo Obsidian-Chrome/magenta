@@ -1,31 +1,31 @@
 [
   {
-    "url": "/media/background.png",
+    "url": "./media/background.png",
     "title": "Test",
     "category": "Test"
   },
   {
-    "url": "/media/smiley_magenta.png",
+    "url": "./media/smiley_magenta.png",
     "title": "Test",
     "category": "Test"
   },
   {
-    "url": "/media/molotov_magenta.png",
+    "url": "./media/molotov_magenta.png",
     "title": "Test",
     "category": "Test"
   },
   {
-    "url": "/media/pochette_album_desktop.png",
+    "url": "./media/pochette_album_desktop.png",
     "title": "Test",
     "category": "Test"
   },
   {
-    "url": "/media/background.png",
+    "url": "./media/background.png",
     "title": "Test",
     "category": "Test"
   },
   {
-    "url": "/media/smiley_magenta.png",
+    "url": "./media/smiley_magenta.png",
     "title": "Test",
     "category": "Test"
   }
