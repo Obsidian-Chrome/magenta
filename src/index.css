@@ -1,0 +1,256 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white font-sans overflow-x-hidden;
+    background-image: 
+      repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+    background-size: 100% 2px;
+  }
+  
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #ff00ff #000;
+  }
+  
+  *::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: #000;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ff00ff, #ffff00);
+    border-radius: 0;
+  }
+}
+
+@layer components {
+  .cyber-panel {
+    position: relative;
+    background: linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(20,0,20,0.95) 100%);
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+    transition: border-color 0.2s ease;
+  }
+  
+  .cyber-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    background: linear-gradient(135deg, #ff00ff, #ffff00);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+  
+  .cyber-panel:hover::before {
+    opacity: 1;
+  }
+  
+  .cyber-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(255,0,255,0.1), transparent 70%);
+    pointer-events: none;
+  }
+  
+  .neon-text {
+    text-shadow: 
+      0 0 5px currentColor,
+      0 0 10px currentColor,
+      0 0 20px currentColor,
+      0 0 40px currentColor;
+  }
+  
+  .glitch-text {
+    position: relative;
+    animation: glitch-skew 3s infinite linear alternate-reverse;
+  }
+  
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .glitch-text::before {
+    left: 2px;
+    text-shadow: -2px 0 #ffff00;
+    clip: rect(24px, 9999px, 90px, 0);
+    animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
+  }
+  
+  .glitch-text::after {
+    left: -2px;
+    text-shadow: -2px 0 #ff00ff;
+    clip: rect(85px, 9999px, 140px, 0);
+    animation: glitch-anim-2 3s infinite linear alternate-reverse;
+  }
+  
+  @keyframes glitch-anim-1 {
+    0% { clip: rect(17px, 9999px, 94px, 0); }
+    25% { clip: rect(44px, 9999px, 62px, 0); }
+    50% { clip: rect(105px, 9999px, 34px, 0); }
+    75% { clip: rect(28px, 9999px, 88px, 0); }
+    100% { clip: rect(71px, 9999px, 55px, 0); }
+  }
+  
+  @keyframes glitch-anim-2 {
+    0% { clip: rect(65px, 9999px, 119px, 0); }
+    25% { clip: rect(90px, 9999px, 41px, 0); }
+    50% { clip: rect(13px, 9999px, 77px, 0); }
+    75% { clip: rect(99px, 9999px, 23px, 0); }
+    100% { clip: rect(52px, 9999px, 85px, 0); }
+  }
+  
+  @keyframes glitch-skew {
+    0% { transform: skewX(0deg); }
+    10% { transform: skewX(0deg); }
+    11% { transform: skewX(2deg); }
+    12% { transform: skewX(0deg); }
+    30% { transform: skewX(0deg); }
+    31% { transform: skewX(-2deg); }
+    32% { transform: skewX(0deg); }
+    100% { transform: skewX(0deg); }
+  }
+  
+  .hexagon {
+    clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+  }
+  
+  .corner-cut {
+    clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+  }
+  
+  .cyber-button {
+    position: relative;
+    background: linear-gradient(135deg, #ff00ff, #ffff00);
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    transition: all 0.2s ease;
+  }
+  
+  .cyber-button:hover {
+    box-shadow: 0 0 15px rgba(255,0,255,0.6), 0 0 25px rgba(255,255,0,0.4);
+    filter: brightness(1.1);
+  }
+  
+  .cyber-button::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: #000;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    pointer-events: none;
+  }
+  
+  .cyber-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ff00ff, #ffff00, transparent);
+  }
+
+  .vinyl-record {
+    position: relative;
+    border-radius: 50%;
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(200, 200, 255, 0.15) 25%,
+      rgba(255, 100, 255, 0.2) 50%,
+      rgba(100, 255, 255, 0.15) 75%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    box-shadow: 
+      0 0 0 2px rgba(255, 255, 255, 0.3),
+      0 0 30px rgba(255, 0, 255, 0.4),
+      inset 0 0 40px rgba(255, 255, 255, 0.1),
+      inset 0 0 80px rgba(255, 0, 255, 0.1);
+  }
+
+  .vinyl-record::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      rgba(255, 100, 255, 0.3) 0deg,
+      rgba(100, 255, 255, 0.3) 60deg,
+      rgba(255, 255, 100, 0.3) 120deg,
+      rgba(255, 100, 255, 0.3) 180deg,
+      rgba(100, 255, 255, 0.3) 240deg,
+      rgba(255, 255, 100, 0.3) 300deg,
+      rgba(255, 100, 255, 0.3) 360deg
+    );
+    opacity: 0.4;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .vinyl-record::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background: radial-gradient(circle, 
+      rgba(0, 0, 0, 0.9) 0%, 
+      rgba(20, 20, 20, 0.8) 40%,
+      rgba(255, 0, 255, 0.3) 70%,
+      transparent 100%
+    );
+    box-shadow: 
+      0 0 0 1px rgba(255, 255, 0, 0.6),
+      0 0 10px rgba(255, 0, 255, 0.5),
+      inset 0 0 8px rgba(0, 0, 0, 0.9);
+    z-index: 6;
+  }
+
+  .vinyl-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .vinyl-label img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @keyframes cd-shimmer {
+    0% { opacity: 0.4; }
+    50% { opacity: 0.6; }
+    100% { opacity: 0.4; }
+  }
+}
+

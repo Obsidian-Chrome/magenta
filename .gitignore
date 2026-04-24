@@ -1,0 +1,12 @@
+# Ignore le contenu du dossier intra dans media
+media/intra/*
+
+# Dependencies
+node_modules/
+
+# Build
+dist/
+*.local
+
+# Logs
+*.log

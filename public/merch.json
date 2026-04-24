@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Logo Smiley Magenta",
+    "image": "/media/smiley_magenta.png",
+    "file": "/media/smiley_magenta.png",
+    "tags": ["logo", "smiley", "png"]
+  },
+  {
+    "name": "Molotov Magenta",
+    "image": "/media/molotov_magenta.png",
+    "file": "/media/molotov_magenta.png",
+    "tags": ["molotov", "design", "png"]
+  },
+  {
+    "name": "Background 1920x1080",
+    "image": "/media/background.png",
+    "file": "/media/background.png",
+    "tags": ["wallpaper", "background", "1920x1080"]
+  }
+]

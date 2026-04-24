@@ -1,0 +1,19 @@
+[
+  {
+    "title": "1er Album",
+    "cover": "/media/pochette_album_desktop.png",
+    "youtubeAlbumLink": "https://youtube.com/playlist?list=example",
+    "tracks": [
+      {
+        "name": "Eat The Rich",
+        "youtube": "https://youtube.com/watch?v=example1",
+        "mp3": "media/mp3/MAGENTA - EAT THE RICH.mp3"
+      },
+      {
+        "name": "The Woman In Yellow",
+        "youtube": "https://youtube.com/watch?v=example2",
+        "mp3": "media/mp3/MAGENTA - THE WOMAN IN YELLOW.mp3"
+      }
+    ]
+  }
+]
