@@ -1,20 +1,14 @@
 [
   {
-    "name": "Logo Smiley Magenta",
-    "image": "media/smiley_magenta.png",
-    "file": "media/smiley_magenta.png",
-    "tags": ["logo", "smiley", "png"]
+    "name": "Veste Magenta - Homme",
+    "images": ["media/img_merch/veste_magenta_1.png","media/img_merch/veste_magenta_2.png","media/img_merch/veste_magenta_3.png"],
+    "file": "media/pmp/NY_Varsity_Jacket_MagentaEdit.pmp",
+    "tags": ["Haut", "TBSE-X", "Homme"]
   },
   {
-    "name": "Molotov Magenta",
-    "image": "media/molotov_magenta.png",
-    "file": "media/molotov_magenta.png",
-    "tags": ["molotov", "design", "png"]
-  },
-  {
-    "name": "Background 1920x1080",
-    "image": "media/background.png",
-    "file": "media/background.png",
-    "tags": ["wallpaper", "background", "1920x1080"]
+    "name": "Holo Mask Magenta",
+    "images": ["media/img_merch/holo_mask_magenta.png"],
+    "file": "media/CLVB_Holo_Mask_MagentaEdit.pmp",
+    "tags": ["Accessoire", "Unisexe"]
   }
 ]

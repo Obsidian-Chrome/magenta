@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import { Music, Calendar, Download, ExternalLink, Hexagon, ChevronRight, Search, SlidersHorizontal } from 'lucide-react'
+import { Music, Calendar, Download, ExternalLink, Hexagon, ChevronRight, Search, SlidersHorizontal, ChevronLeft } from 'lucide-react'
 import AudioPlayer from './components/AudioPlayer'
 import MiniPlayer from './components/MiniPlayer'
 import ImageModal from './components/ImageModal'
@@ -643,22 +643,65 @@ function App() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {filteredAndSortedMerch.map((item, idx) => (
-                    <div 
-                      key={idx}
-                      className="cyber-panel p-6 group"
-                    >
-                      {item.image && (
-                        <img 
-                          src={item.image}
-                          alt={item.name}
-                          onClick={() => {
-                            setSelectedImage(item.image)
-                            setSelectedImageName(item.name)
-                          }}
-                          className="w-full h-48 object-cover corner-cut mb-4 cursor-pointer hover:opacity-80 transition-opacity"
-                        />
-                      )}
+                  {filteredAndSortedMerch.map((item, idx) => {
+                    const MerchItem = () => {
+                      const [currentImageIndex, setCurrentImageIndex] = useState(0)
+                      const images = item.images || (item.image ? [item.image] : [])
+                      
+                      const nextImage = () => {
+                        setCurrentImageIndex((prev) => (prev + 1) % images.length)
+                      }
+                      
+                      const prevImage = () => {
+                        setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
+                      }
+                      
+                      return (
+                        <div 
+                          key={idx}
+                          className="cyber-panel p-6 group"
+                        >
+                          {images.length > 0 && (
+                            <div className="relative mb-4 aspect-square">
+                              <img 
+                                src={images[currentImageIndex]}
+                                alt={item.name}
+                                onClick={() => {
+                                  setSelectedImage(images[currentImageIndex])
+                                  setSelectedImageName(item.name)
+                                }}
+                                className="w-full h-full object-cover corner-cut cursor-pointer hover:opacity-80 transition-opacity"
+                              />
+                              {images.length > 1 && (
+                                <>
+                                  <button
+                                    onClick={prevImage}
+                                    className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-black/70 hover:bg-cyber-magenta/80 transition-colors rounded-full"
+                                  >
+                                    <ChevronLeft size={20} className="text-cyber-yellow" />
+                                  </button>
+                                  <button
+                                    onClick={nextImage}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-black/70 hover:bg-cyber-magenta/80 transition-colors rounded-full"
+                                  >
+                                    <ChevronRight size={20} className="text-cyber-yellow" />
+                                  </button>
+                                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                                    {images.map((_, imgIdx) => (
+                                      <div
+                                        key={imgIdx}
+                                        className={`w-2 h-2 rounded-full transition-all ${
+                                          imgIdx === currentImageIndex
+                                            ? 'bg-cyber-magenta w-4'
+                                            : 'bg-cyber-magenta/30'
+                                        }`}
+                                      />
+                                    ))}
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          )}
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
                           <h3 className="text-white font-bold text-lg mb-2">{item.name}</h3>
@@ -692,8 +735,12 @@ function App() {
                           <Download size={24} className="text-cyber-yellow group-hover:animate-pulse" />
                         </a>
                       </div>
-                    </div>
-                  ))}
+                        </div>
+                      )
+                    }
+                    
+                    return <MerchItem key={idx} />
+                  })}
                 </div>
 
                 {filteredAndSortedMerch.length === 0 && (
