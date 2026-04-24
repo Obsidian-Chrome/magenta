@@ -25,10 +25,10 @@ function App() {
 
   useEffect(() => {
     Promise.all([
-      fetch('/albums.json').then(res => res.json()),
-      fetch('/concerts.json').then(res => res.json()),
-      fetch('/merch.json').then(res => res.json()),
-      fetch('/media.json').then(res => res.json())
+      fetch('albums.json').then(res => res.json()),
+      fetch('concerts.json').then(res => res.json()),
+      fetch('merch.json').then(res => res.json()),
+      fetch('media.json').then(res => res.json())
     ])
       .then(([albums, concerts, merch, media]) => {
         setData({ albums, concerts, merch, media })
