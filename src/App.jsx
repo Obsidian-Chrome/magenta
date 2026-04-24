@@ -231,7 +231,7 @@ function App() {
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-6">
               <video 
-                src="./media/smiley_magenta.webm" 
+                src="media/smiley_magenta.webm" 
                 className="w-32 h-32"
                 autoPlay
                 loop
@@ -797,7 +797,7 @@ function App() {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                     <div className="text-center">
                       <img 
-                        src="./media/img_about/straya.png" 
+                        src="media/img_about/straya.png" 
                         alt="Straya"
                         className="w-full aspect-square object-cover mb-3 corner-cut"
                       />
@@ -807,7 +807,7 @@ function App() {
 
                     <div className="text-center">
                       <img 
-                        src="./media/img_about/jett.png" 
+                        src="media/img_about/jett.png" 
                         alt="Jett"
                         className="w-full aspect-square object-cover mb-3 corner-cut"
                       />
@@ -817,7 +817,7 @@ function App() {
 
                     <div className="text-center">
                       <img 
-                        src="./media/img_about/xayden.png" 
+                        src="media/img_about/xayden.png" 
                         alt="Xayden"
                         className="w-full aspect-square object-cover mb-3 corner-cut"
                       />
@@ -827,7 +827,7 @@ function App() {
 
                     <div className="text-center">
                       <img 
-                        src="./media/img_about/sanakh.png" 
+                        src="media/img_about/sanakh.png" 
                         alt="Sanakh"
                         className="w-full aspect-square object-cover mb-3 corner-cut"
                       />
