@@ -268,6 +268,9 @@ function App() {
                 <NavButton onClick={() => setActiveSection('music')} active={activeSection === 'music'}>
                   Musique
                 </NavButton>
+                <NavButton onClick={() => window.open('https://w2g.tv/?r=dmd75y71w47v69e0wh', '_blank', 'noopener,noreferrer')} active={false}>
+                  W2G
+                </NavButton>
                 <NavButton onClick={() => setActiveSection('concerts')} active={activeSection === 'concerts'}>
                   Concerts
                 </NavButton>
