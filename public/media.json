@@ -1,32 +1,17 @@
 [
   {
-    "url": "media/background.png",
-    "title": "Test",
-    "category": "Test"
+    "url": "media/img_media/magenta_band.png",
+    "title": "Magenta fond d'écran",
+    "category": "Wallpaper"
   },
   {
     "url": "media/smiley_magenta.png",
-    "title": "Test",
-    "category": "Test"
+    "title": "Logo Magenta",
+    "category": "Logo"
   },
   {
     "url": "media/molotov_magenta.png",
-    "title": "Test",
-    "category": "Test"
-  },
-  {
-    "url": "media/pochette_album_desktop.png",
-    "title": "Test",
-    "category": "Test"
-  },
-  {
-    "url": "media/background.png",
-    "title": "Test",
-    "category": "Test"
-  },
-  {
-    "url": "media/smiley_magenta.png",
-    "title": "Test",
-    "category": "Test"
+    "title": "Logo Magenta molotov",
+    "category": "Logo"
   }
 ]

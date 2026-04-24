@@ -20,6 +20,7 @@ function App() {
   const [duration, setDuration] = useState(0)
   const [shuffle, setShuffle] = useState(false)
   const [repeat, setRepeat] = useState('none')
+  const [showW2GModal, setShowW2GModal] = useState(false)
   const audioRef = useRef(null)
   const lastUpdateRef = useRef(0)
 
@@ -225,30 +226,30 @@ function App() {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-7xl">
-        <header className="cyber-panel p-8 mb-8 relative overflow-hidden">
+        <header className="cyber-panel p-4 md:p-8 mb-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-cyber-magenta opacity-10 blur-3xl rounded-full"></div>
           
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-6">
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 w-full md:w-auto">
               <video 
                 src="media/smiley_magenta.webm" 
-                className="w-32 h-32"
+                className="w-20 h-20 md:w-32 md:h-32 flex-shrink-0"
                 autoPlay
                 loop
                 muted
                 playsInline
               />
-              <div>
-                <h1 className="text-5xl md:text-7xl font-display font-black text-cyber-magenta" 
+              <div className="text-center md:text-left w-full md:w-auto">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-black text-cyber-magenta break-words" 
                     data-text="MAGENTA">
                   MAGENTA
                 </h1>
-                <div className="flex items-center gap-3 mt-2">
-                  <div className="h-px w-8 bg-gradient-to-r from-cyber-magenta to-cyber-yellow"></div>
-                  <p className="text-cyber-yellow text-sm md:text-base font-bold uppercase tracking-widest">
+                <div className="flex items-center justify-center md:justify-start gap-2 md:gap-3 mt-2">
+                  <div className="h-px w-4 md:w-8 bg-gradient-to-r from-cyber-magenta to-cyber-yellow"></div>
+                  <p className="text-cyber-yellow text-xs sm:text-sm md:text-base font-bold uppercase tracking-wide md:tracking-widest whitespace-nowrap">
                     Burn • Corpo • Shit
                   </p>
-                  <div className="h-px w-8 bg-gradient-to-r from-cyber-yellow to-cyber-magenta"></div>
+                  <div className="h-px w-4 md:w-8 bg-gradient-to-r from-cyber-yellow to-cyber-magenta"></div>
                 </div>
               </div>
             </div>
@@ -268,7 +269,7 @@ function App() {
                 <NavButton onClick={() => setActiveSection('music')} active={activeSection === 'music'}>
                   Musique
                 </NavButton>
-                <NavButton onClick={() => window.open('https://w2g.tv/?r=dmd75y71w47v69e0wh', '_blank', 'noopener,noreferrer')} active={false}>
+                <NavButton onClick={() => setShowW2GModal(true)} active={false}>
                   W2G
                 </NavButton>
                 <NavButton onClick={() => setActiveSection('concerts')} active={activeSection === 'concerts'}>
@@ -454,41 +455,30 @@ function App() {
                               t => t.name === track.name && t.album === album.title
                             )
                             return (
-                              <div 
-                              key={trackIdx} 
-                              className="flex items-center justify-between p-3 bg-black/50 border border-cyber-magenta/30 hover:border-cyber-magenta/50 hover:bg-black/70 transition-all duration-200 corner-cut"
+                              <button 
+                              key={trackIdx}
+                              onClick={() => {
+                                setCurrentTrackIndex(globalTrackIndex)
+                                if (!isPlaying) {
+                                  setTimeout(() => togglePlay(), 100)
+                                }
+                              }}
+                              className="w-full flex items-center justify-between p-3 bg-black/50 border border-cyber-magenta/30 hover:border-cyber-magenta/50 hover:bg-black/70 transition-all duration-200 corner-cut cursor-pointer"
                               >
                                 <div className="flex items-center gap-3 flex-1">
-                                  <button
-                                    onClick={() => {
-                                      setCurrentTrackIndex(globalTrackIndex)
-                                      if (!isPlaying) {
-                                        setTimeout(() => togglePlay(), 100)
-                                      }
-                                    }}
-                                    className="p-2 hover:bg-cyber-yellow/20 transition-colors rounded"
-                                  >
-                                    <Music size={18} className="text-cyber-yellow" />
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      setCurrentTrackIndex(globalTrackIndex)
-                                      if (!isPlaying) {
-                                        setTimeout(() => togglePlay(), 100)
-                                      }
-                                    }}
-                                    className="text-white font-medium hover:text-cyber-yellow transition-colors cursor-pointer text-left"
-                                  >
+                                  <Music size={18} className="text-cyber-yellow" />
+                                  <span className="text-white font-medium hover:text-cyber-yellow transition-colors text-left">
                                     {track.name}
-                                  </button>
+                                  </span>
                                 </div>
                                 <div className="flex gap-3">
                                   <a 
                                     href={track.youtube}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="p-2 hover:bg-cyber-magenta/20 transition-colors rounded"
+                                    className="p-2 hover:bg-cyber-magenta/20 transition-colors rounded relative z-10"
                                     title="Voir sur YouTube"
+                                    onClick={(e) => e.stopPropagation()}
                                   >
                                     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#FFFF00">
                                       <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -497,12 +487,13 @@ function App() {
                                   <a 
                                     href={track.mp3}
                                     download
-                                    className="p-2 hover:bg-cyber-yellow/20 transition-colors"
+                                    className="p-2 hover:bg-cyber-yellow/20 transition-colors relative z-10"
+                                    onClick={(e) => e.stopPropagation()}
                                   >
                                     <Download size={18} className="text-cyber-yellow" />
                                   </a>
                                 </div>
-                              </div>
+                              </button>
                             )
                           })}
                         </div>
@@ -735,12 +726,15 @@ function App() {
                           setSelectedImage(item.url)
                           setSelectedImageName(item.title)
                         }}
-                        className={`cyber-panel p-0 overflow-hidden transition-all duration-200 cursor-pointer group relative ${gridClass}`}
+                        style={{
+                          clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))',
+                          background: 'linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(20,0,20,0.95) 100%)',
+                        }}
+                        className={`p-0 transition-all duration-200 cursor-pointer group relative border-2 border-cyber-magenta/80 hover:border-cyber-magenta ${gridClass}`}
                       >
                         <div className="absolute inset-0 bg-gradient-to-br from-cyber-magenta/20 to-cyber-yellow/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"></div>
-                        <div className="absolute inset-0 border-2 border-cyber-magenta/0 group-hover:border-cyber-magenta/60 transition-all duration-300 pointer-events-none z-10 corner-cut"></div>
                         
-                        <div className={`relative ${isRectangle ? 'aspect-[2/1]' : 'aspect-square'}`}>
+                        <div className={`relative overflow-hidden w-full h-full ${isRectangle ? 'aspect-[2/1]' : 'aspect-square'}`}>
                           <img 
                             src={item.url}
                             alt={item.title}
@@ -864,14 +858,45 @@ function App() {
         />
       )}
 
-      <ImageModal 
-        imageUrl={selectedImage}
-        imageName={selectedImageName}
-        onClose={() => {
-          setSelectedImage(null)
-          setSelectedImageName('')
-        }}
-      />
+      {selectedImage && (
+        <ImageModal 
+          imageUrl={selectedImage}
+          imageName={selectedImageName}
+          onClose={() => {
+            setSelectedImage(null)
+            setSelectedImageName('')
+          }}
+        />
+      )}
+
+      {showW2GModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowW2GModal(false)}>
+          <div className="cyber-panel p-8 max-w-md w-full relative" onClick={(e) => e.stopPropagation()}>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-cyber-yellow opacity-10 blur-3xl rounded-full"></div>
+            <div className="relative z-10">
+              <h3 className="text-2xl font-bold text-cyber-magenta mb-4">OUVRIR W2G ?</h3>
+              <p className="text-white mb-6">Vous allez ouvrir <span className="text-cyber-yellow font-bold">Watch2Gether</span> dans un nouvel onglet pour écouter la musique ensemble.</p>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => {
+                    window.open('https://w2g.tv/?r=dmd75y71w47v69e0wh', '_blank', 'noopener,noreferrer')
+                    setShowW2GModal(false)
+                  }}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-cyber-magenta to-cyber-yellow text-black font-bold uppercase tracking-wider hover:opacity-80 transition-opacity corner-cut"
+                >
+                  Ouvrir
+                </button>
+                <button
+                  onClick={() => setShowW2GModal(false)}
+                  className="flex-1 px-6 py-3 border-2 border-cyber-magenta text-cyber-magenta font-bold uppercase tracking-wider hover:bg-cyber-magenta/20 transition-colors corner-cut"
+                >
+                  Annuler
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {activeSection !== 'music' && allTracks.length > 0 && (
         <MiniPlayer 
