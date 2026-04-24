@@ -1,5 +1,5 @@
 # Ignore le contenu du dossier intra dans media
-media/intra/*
+public/media/intra/*
 
 # Dependencies
 node_modules/
