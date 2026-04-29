@@ -1,5 +1,13 @@
 [
   {
+    "id": 2,
+    "title": "Second test plus probant",
+    "content": "Ceci est un test pour vérifier que le système fonctionne correctement.",
+    "date": "2026-04-30",
+    "image": "https://www.magenta-band.fr/media/img_media/magenta_band.png",
+    "link": "https://www.magenta-band.fr/"
+  },
+  {
     "id": 1,
     "title": "Test de publication",
     "content": "Ceci est un test pour vérifier que le système fonctionne correctement.",
