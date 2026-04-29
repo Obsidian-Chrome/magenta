@@ -1,24 +1,8 @@
 [
   {
-    "id": 2,
-    "title": "Second test plus probant",
-    "content": "Ceci est un test pour vérifier que le système fonctionne correctement.",
-    "date": "2026-04-30",
-    "image": "https://www.magenta-band.fr/media/img_media/magenta_band.png",
-    "link": "https://www.magenta-band.fr/"
-  },
-  {
-    "id": 3,
-    "title": "Troisième et dernier test",
-    "content": "Ceci est un test pour vérifier que le système fonctionne correctement.",
-    "date": "2026-04-30",
-    "image": "https://www.magenta-band.fr/media/img_merch/veste_magenta_1.png",
-    "link": "https://www.magenta-band.fr/"
-  },
-  {
     "id": 1,
     "title": "Test de publication",
-    "content": "Ceci est un test pour vérifier que le système fonctionne correctement.",
+    "content": "Ceci est un **test** pour vérifier que le système *fonctionne correctement*.\n\n\n\n- Liste à puce\n\n- Liste à puce\n\n\n\n1. Liste numéroté\n\n1. Liste numéroté",
     "date": "2026-04-29",
     "image": "https://www.magenta-band.fr/media/img_media/magenta_band.png",
     "link": "https://www.magenta-band.fr/"
