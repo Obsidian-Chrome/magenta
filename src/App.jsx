@@ -27,12 +27,64 @@ function App() {
   const lastUpdateRef = useRef(0)
 
   useEffect(() => {
-    // Détection du hash pour accès direct à la page macro
-    const hash = window.location.hash
-    if (hash === '#macro') {
-      setActiveSection('ffxiv-macro')
+    // Détection du hash pour accès direct aux sections
+    const hash = window.location.hash.substring(1)
+    const sectionMap = {
+      'accueil': 'home',
+      'musique': 'music',
+      'news': 'news',
+      'concerts': 'concerts',
+      'merch': 'merch',
+      'media': 'media',
+      'a-propos': 'about',
+      'macro': 'ffxiv-macro'
+    }
+    
+    if (hash.startsWith('news-')) {
+      const articleId = parseInt(hash.replace('news-', ''))
+      setActiveSection('news')
+      setSelectedNewsId(articleId)
+      // Scroll avec offset pour éviter le mini player
+      setTimeout(() => {
+        const element = document.getElementById(hash)
+        if (element) {
+          const yOffset = -100
+          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
+          window.scrollTo({top: y, behavior: 'smooth'})
+        }
+      }, 100)
+    } else if (sectionMap[hash]) {
+      setActiveSection(sectionMap[hash])
+      setTimeout(() => {
+        const element = document.getElementById(hash)
+        if (element) {
+          const yOffset = -100
+          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
+          window.scrollTo({top: y, behavior: 'smooth'})
+        }
+      }, 100)
     }
   }, [])
+
+  // Gérer la mise à jour du hash selon la section active
+  useEffect(() => {
+    const hashMap = {
+      'home': 'accueil',
+      'music': 'musique',
+      'news': 'news',
+      'concerts': 'concerts',
+      'merch': 'merch',
+      'media': 'media',
+      'about': 'a-propos',
+      'ffxiv-macro': 'macro'
+    }
+    
+    if (selectedNewsId !== null && activeSection === 'news') {
+      window.location.hash = `news-${selectedNewsId}`
+    } else if (hashMap[activeSection]) {
+      window.location.hash = hashMap[activeSection]
+    }
+  }, [selectedNewsId, activeSection])
 
   useEffect(() => {
     Promise.all([
@@ -309,7 +361,7 @@ function App() {
 
           <main className="lg:col-span-3">
             {activeSection === 'home' && (
-              <div className="space-y-6">
+              <div id="accueil" className="space-y-6 scroll-mt-24">
                 {news && news.length > 0 && (
                   <div className="cyber-panel p-6">
                     <div className="flex items-center justify-between mb-4">
@@ -336,7 +388,7 @@ function App() {
                             setActiveSection('news')
                             setSelectedNewsId(article.id)
                           }}
-                          className="w-full pb-4 border-b border-cyber-magenta/20 last:border-0 text-left hover:bg-cyber-magenta/5 transition-colors p-3 -m-3"
+                          className="w-full pb-4 border-b border-cyber-magenta/20 last:border-0 text-left hover:bg-cyber-magenta/5 transition-colors p-3 rounded"
                         >
                           <div className="flex items-center gap-2 mb-2">
                             <span className="text-cyber-magenta/60 text-xs uppercase tracking-wider">
@@ -453,7 +505,7 @@ function App() {
             )}
 
             {activeSection === 'news' && (
-              <div className="space-y-6">
+              <div id="news" className="space-y-6 scroll-mt-24">
                 {selectedNewsId === null ? (
                   <>
                     <div className="cyber-panel p-6">
@@ -466,17 +518,19 @@ function App() {
                     {news && news.length > 0 ? (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {news.map((article) => (
-                          <div key={article.id} className="cyber-panel p-0 overflow-hidden group">
-                            {article.image && (
-                              <div className="relative h-48 overflow-hidden">
-                                <img 
-                                  src={article.image} 
-                                  alt={article.title}
-                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                              </div>
-                            )}
+                          <div key={article.id} id={`news-${article.id}`} className="cyber-panel p-0 group scroll-mt-24">
+                            <div className="p-[2px]">
+                              {article.image && (
+                                <div className="relative h-48 overflow-hidden" style={{clipPath: 'polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px))'}}>
+                                  <img 
+                                    src={article.image} 
+                                    alt={article.title}
+                                    className="w-full h-full object-cover group-hover:opacity-70 transition-opacity duration-300"
+                                  />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                                </div>
+                              )}
+                            </div>
                             <div className="p-6">
                               <div className="flex items-center gap-2 mb-3">
                                 <Hexagon size={14} className="text-cyber-magenta" />
@@ -527,7 +581,7 @@ function App() {
                             <div className="cyber-divider my-4"></div>
                           </div>
 
-                          <div className="cyber-panel p-6">
+                          <div id={`news-${article.id}`} className="cyber-panel p-6 scroll-mt-24">
                             {article.image && (
                               <div className="mb-6">
                                 <img 
@@ -571,7 +625,7 @@ function App() {
             )}
 
             {activeSection === 'music' && (
-              <div className="space-y-6">
+              <div id="musique" className="space-y-6 scroll-mt-24">
                 <div className="cyber-panel p-6">
                   <h2 className="text-3xl font-display font-black text-cyber-magenta mb-2">
                     // MUSIQUE
@@ -685,7 +739,7 @@ function App() {
             )}
 
             {activeSection === 'concerts' && (
-              <div className="space-y-6">
+              <div id="concerts" className="space-y-6 scroll-mt-24">
                 <div className="cyber-panel p-6">
                   <h2 className="text-3xl font-display font-black text-cyber-magenta mb-2">
                     // CONCERTS
@@ -760,7 +814,7 @@ function App() {
             )}
 
             {activeSection === 'merch' && (
-              <div className="space-y-6">
+              <div id="merch" className="space-y-6 scroll-mt-24">
                 <div className="cyber-panel p-6">
                   <h2 className="text-3xl font-display font-black text-cyber-magenta mb-2">
                     // MERCH
@@ -932,7 +986,7 @@ function App() {
             )}
 
             {activeSection === 'media' && (
-              <div className="space-y-6">
+              <div id="media" className="space-y-6 scroll-mt-24">
                 <div className="cyber-panel p-6">
                   <h2 className="text-3xl font-display font-black text-cyber-magenta mb-2">
                     // MEDIA
@@ -995,7 +1049,7 @@ function App() {
             )}
 
             {activeSection === 'about' && (
-              <div className="space-y-6">
+              <div id="a-propos" className="space-y-6 scroll-mt-24">
                 <div className="cyber-panel p-6">
                   <h2 className="text-3xl font-display font-black text-cyber-magenta mb-2">
                     // À PROPOS
