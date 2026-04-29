@@ -138,6 +138,7 @@ function extractMarkdownContent(body, contentStartIndex) {
   const numChildren = body.getNumChildren();
   const markdownLines = [];
   let foundContentMarker = false;
+  let previousWasList = false;
   
   for (let i = 0; i < numChildren; i++) {
     const child = body.getChild(i);
@@ -154,6 +155,12 @@ function extractMarkdownContent(body, contentStartIndex) {
         }
         continue;
       }
+      
+      // Ajouter une ligne vide après une liste si on passe à un paragraphe
+      if (previousWasList && text) {
+        markdownLines.push('');
+      }
+      previousWasList = false;
       
       // Skip les lignes vides
       if (!text) {
@@ -181,16 +188,19 @@ function extractMarkdownContent(body, contentStartIndex) {
       } else {
         markdownLines.push('- ' + formattedText);
       }
+      
+      previousWasList = true;
     }
   }
   
-  // Nettoyer les lignes vides consécutives excessives
+  // Nettoyer et joindre les lignes
   let cleanedLines = [];
   let previousWasEmpty = false;
   
   for (let i = 0; i < markdownLines.length; i++) {
     const line = markdownLines[i];
     const isEmpty = line.trim() === '';
+    const isList = line.startsWith('- ') || line.startsWith('1. ');
     
     if (isEmpty) {
       if (!previousWasEmpty) {
@@ -203,7 +213,27 @@ function extractMarkdownContent(body, contentStartIndex) {
     }
   }
   
-  return cleanedLines.join('\n\n').trim();
+  // Joindre avec un seul saut de ligne pour les listes, double pour les paragraphes
+  let result = '';
+  for (let i = 0; i < cleanedLines.length; i++) {
+    const line = cleanedLines[i];
+    const nextLine = i + 1 < cleanedLines.length ? cleanedLines[i + 1] : null;
+    const isList = line.startsWith('- ') || line.startsWith('1. ');
+    const nextIsList = nextLine && (nextLine.startsWith('- ') || nextLine.startsWith('1. '));
+    
+    result += line;
+    
+    if (nextLine !== null) {
+      // Un seul saut de ligne entre items de liste consécutifs
+      if (isList && nextIsList) {
+        result += '\n';
+      } else {
+        result += '\n\n';
+      }
+    }
+  }
+  
+  return result.trim();
 }
 
 // ========== EXTRAIRE LE TEXTE AVEC FORMATAGE ==========

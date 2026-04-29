@@ -399,7 +399,7 @@ function App() {
                             </span>
                           </div>
                           <h4 className="text-lg font-bold text-cyber-yellow mb-1 group-hover:text-white transition-colors">{article.title}</h4>
-                          <div className="text-white/70 text-sm line-clamp-2 prose prose-invert prose-sm max-w-none">
+                          <div className="text-white/70 text-sm line-clamp-2 prose prose-invert prose-sm max-w-none news-content">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
                           </div>
                           <div className="mt-2 text-cyber-magenta text-xs uppercase flex items-center gap-1">
@@ -546,7 +546,7 @@ function App() {
                               <h3 className="text-xl font-bold text-cyber-yellow mb-3 group-hover:text-white transition-colors">
                                 {article.title}
                               </h3>
-                              <div className="text-white/70 text-sm mb-4 line-clamp-3 prose prose-invert prose-sm max-w-none">
+                              <div className="text-white/70 text-sm mb-4 line-clamp-3 prose prose-invert prose-sm max-w-none news-content">
                                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
                               </div>
                               <button
@@ -610,7 +610,7 @@ function App() {
                               </span>
                             </div>
                             <h3 className="text-3xl font-bold text-cyber-yellow mb-6">{article.title}</h3>
-                            <div className="text-white/90 text-lg mb-6 leading-relaxed prose prose-invert prose-lg max-w-none">
+                            <div className="text-white/90 text-lg mb-6 leading-relaxed prose prose-invert prose-lg max-w-none news-content">
                               <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
                             </div>
                             {article.link && (

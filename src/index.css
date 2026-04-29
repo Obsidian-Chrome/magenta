@@ -252,5 +252,32 @@
     50% { opacity: 0.6; }
     100% { opacity: 0.4; }
   }
+
+  .news-content strong {
+    color: #ffff00;
+    font-weight: bold;
+  }
+
+  .news-content em {
+    color: #ff00ff;
+    font-style: italic;
+  }
+
+  .news-content ul,
+  .news-content ol {
+    margin-left: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .news-content ul li {
+    list-style-type: disc;
+    margin-bottom: 0.25rem;
+  }
+
+  .news-content ol li {
+    list-style-type: decimal;
+    margin-bottom: 0.25rem;
+  }
 }
 
