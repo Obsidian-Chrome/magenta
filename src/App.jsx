@@ -87,12 +87,13 @@ function App() {
   }, [selectedNewsId, activeSection])
 
   useEffect(() => {
+    const timestamp = new Date().getTime()
     Promise.all([
-      fetch('albums.json').then(res => res.json()),
-      fetch('concerts.json').then(res => res.json()),
-      fetch('merch.json').then(res => res.json()),
-      fetch('media.json').then(res => res.json()),
-      fetch('news.json').then(res => res.json())
+      fetch(`albums.json?t=${timestamp}`).then(res => res.json()),
+      fetch(`concerts.json?t=${timestamp}`).then(res => res.json()),
+      fetch(`merch.json?t=${timestamp}`).then(res => res.json()),
+      fetch(`media.json?t=${timestamp}`).then(res => res.json()),
+      fetch(`news.json?t=${timestamp}`).then(res => res.json())
     ])
       .then(([albums, concerts, merch, media, news]) => {
         setData({ albums, concerts, merch, media, news })
