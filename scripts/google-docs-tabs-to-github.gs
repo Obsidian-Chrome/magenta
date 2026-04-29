@@ -184,36 +184,78 @@ function extractMarkdownContent(body, contentStartIndex) {
     }
   }
   
-  return markdownLines.join('\n\n');
+  // Nettoyer les lignes vides consécutives excessives
+  let cleanedLines = [];
+  let previousWasEmpty = false;
+  
+  for (let i = 0; i < markdownLines.length; i++) {
+    const line = markdownLines[i];
+    const isEmpty = line.trim() === '';
+    
+    if (isEmpty) {
+      if (!previousWasEmpty) {
+        cleanedLines.push(line);
+      }
+      previousWasEmpty = true;
+    } else {
+      cleanedLines.push(line);
+      previousWasEmpty = false;
+    }
+  }
+  
+  return cleanedLines.join('\n\n').trim();
 }
 
 // ========== EXTRAIRE LE TEXTE AVEC FORMATAGE ==========
 function extractFormattedText(element) {
-  const text = element.getText();
-  const indices = element.getTextAttributeIndices();
-  let result = '';
+  const textElement = element.editAsText();
+  const text = textElement.getText();
+  if (!text) return '';
   
-  for (let i = 0; i < indices.length; i++) {
-    const startOffset = indices[i];
-    const endOffset = i + 1 < indices.length ? indices[i + 1] : text.length;
-    const partialText = text.substring(startOffset, endOffset);
+  let result = '';
+  let currentBold = null;
+  let currentItalic = null;
+  let buffer = '';
+  
+  for (let i = 0; i < text.length; i++) {
+    const isBold = textElement.isBold(i);
+    const isItalic = textElement.isItalic(i);
     
-    if (!partialText) continue;
-    
-    const isBold = element.isBold(startOffset);
-    const isItalic = element.isItalic(startOffset);
-    
-    let formattedText = partialText;
-    
-    if (isBold && isItalic) {
-      formattedText = '***' + partialText + '***';
-    } else if (isBold) {
-      formattedText = '**' + partialText + '**';
-    } else if (isItalic) {
-      formattedText = '*' + partialText + '*';
+    // Détection de changement de style
+    if (isBold !== currentBold || isItalic !== currentItalic) {
+      // Flush le buffer avec l'ancien style
+      if (buffer) {
+        if (currentBold && currentItalic) {
+          result += '***' + buffer + '***';
+        } else if (currentBold) {
+          result += '**' + buffer + '**';
+        } else if (currentItalic) {
+          result += '*' + buffer + '*';
+        } else {
+          result += buffer;
+        }
+        buffer = '';
+      }
+      
+      // Mettre à jour le style actuel
+      currentBold = isBold;
+      currentItalic = isItalic;
     }
     
-    result += formattedText;
+    buffer += text.charAt(i);
+  }
+  
+  // Flush le dernier buffer
+  if (buffer) {
+    if (currentBold && currentItalic) {
+      result += '***' + buffer + '***';
+    } else if (currentBold) {
+      result += '**' + buffer + '**';
+    } else if (currentItalic) {
+      result += '*' + buffer + '*';
+    } else {
+      result += buffer;
+    }
   }
   
   return result;
