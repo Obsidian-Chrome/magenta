@@ -8,6 +8,7 @@ import FFXIVMacro from './components/FFXIVMacro'
 function App() {
   const [activeSection, setActiveSection] = useState('home')
   const [data, setData] = useState({ albums: [], concerts: [], merch: [], media: [], news: [] })
+  const [selectedNewsId, setSelectedNewsId] = useState(null)
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
   const [allTracks, setAllTracks] = useState([])
   const [fileSizes, setFileSizes] = useState({})
@@ -70,7 +71,7 @@ function App() {
   const albums = data.albums
   const merch = data.merch
   const media = data.media
-  const news = data.news
+  const news = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date))
 
   const isPastConcert = (dateStr) => {
     return new Date(dateStr) < new Date()
@@ -283,7 +284,10 @@ function App() {
                 <NavButton onClick={() => setShowW2GModal(true)} active={false}>
                   W2G
                 </NavButton>
-                <NavButton onClick={() => setActiveSection('news')} active={activeSection === 'news'}>
+                <NavButton onClick={() => {
+                  setActiveSection('news')
+                  setSelectedNewsId(null)
+                }} active={activeSection === 'news'}>
                   News
                 </NavButton>
                 <NavButton onClick={() => setActiveSection('concerts')} active={activeSection === 'concerts'}>
@@ -311,10 +315,13 @@ function App() {
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-2xl font-bold text-cyber-yellow flex items-center gap-3">
                         <Hexagon size={24} />
-                        ACTUALITÉS
+                        NEWS
                       </h3>
                       <button
-                        onClick={() => setActiveSection('news')}
+                        onClick={() => {
+                          setActiveSection('news')
+                          setSelectedNewsId(null)
+                        }}
                         className="text-cyber-magenta hover:text-cyber-yellow transition-colors text-sm font-bold uppercase flex items-center gap-2"
                       >
                         Voir tout
@@ -323,15 +330,25 @@ function App() {
                     </div>
                     <div className="space-y-4">
                       {news.slice(0, 2).map((article) => (
-                        <div key={article.id} className="pb-4 border-b border-cyber-magenta/20 last:border-0">
+                        <button
+                          key={article.id}
+                          onClick={() => {
+                            setActiveSection('news')
+                            setSelectedNewsId(article.id)
+                          }}
+                          className="w-full pb-4 border-b border-cyber-magenta/20 last:border-0 text-left hover:bg-cyber-magenta/5 transition-colors p-3 -m-3"
+                        >
                           <div className="flex items-center gap-2 mb-2">
                             <span className="text-cyber-magenta/60 text-xs uppercase tracking-wider">
                               {new Date(article.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </span>
                           </div>
-                          <h4 className="text-lg font-bold text-cyber-yellow mb-1">{article.title}</h4>
+                          <h4 className="text-lg font-bold text-cyber-yellow mb-1 group-hover:text-white transition-colors">{article.title}</h4>
                           <p className="text-white/70 text-sm line-clamp-2">{article.content}</p>
-                        </div>
+                          <div className="mt-2 text-cyber-magenta text-xs uppercase flex items-center gap-1">
+                            Lire l'article <ChevronRight size={14} />
+                          </div>
+                        </button>
                       ))}
                     </div>
                   </div>
@@ -437,59 +454,118 @@ function App() {
 
             {activeSection === 'news' && (
               <div className="space-y-6">
-                <div className="cyber-panel p-6">
-                  <h2 className="text-3xl font-display font-black text-cyber-magenta mb-2">
-                    // ACTUALITÉS
-                  </h2>
-                  <div className="cyber-divider my-4"></div>
-                </div>
-
-                {news && news.length > 0 ? (
-                  news.map((article) => (
-                    <div key={article.id} className="cyber-panel p-6">
-                      <div className="flex flex-col md:flex-row gap-6">
-                        {article.image && (
-                          <div className="flex-shrink-0">
-                            <img 
-                              src={article.image} 
-                              alt={article.title}
-                              className="w-full md:w-48 h-48 object-cover corner-cut"
-                            />
-                          </div>
-                        )}
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-3">
-                            <Hexagon size={16} className="text-cyber-magenta" />
-                            <span className="text-cyber-magenta/60 text-sm uppercase tracking-wider">
-                              {new Date(article.date).toLocaleDateString('fr-FR', { 
-                                weekday: 'long',
-                                day: 'numeric', 
-                                month: 'long', 
-                                year: 'numeric' 
-                              })}
-                            </span>
-                          </div>
-                          <h3 className="text-2xl font-bold text-cyber-yellow mb-3">{article.title}</h3>
-                          <p className="text-white/90 mb-4 leading-relaxed">{article.content}</p>
-                          {article.link && (
-                            <a 
-                              href={article.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 px-4 py-2 bg-cyber-magenta/20 hover:bg-cyber-magenta/30 text-cyber-magenta border border-cyber-magenta/50 transition-colors text-sm font-bold uppercase corner-cut"
-                            >
-                              En savoir plus
-                              <ExternalLink size={14} />
-                            </a>
-                          )}
-                        </div>
-                      </div>
+                {selectedNewsId === null ? (
+                  <>
+                    <div className="cyber-panel p-6">
+                      <h2 className="text-3xl font-display font-black text-cyber-magenta mb-2">
+                        // NEWS
+                      </h2>
+                      <div className="cyber-divider my-4"></div>
                     </div>
-                  ))
+
+                    {news && news.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {news.map((article) => (
+                          <div key={article.id} className="cyber-panel p-0 overflow-hidden group">
+                            {article.image && (
+                              <div className="relative h-48 overflow-hidden">
+                                <img 
+                                  src={article.image} 
+                                  alt={article.title}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                              </div>
+                            )}
+                            <div className="p-6">
+                              <div className="flex items-center gap-2 mb-3">
+                                <Hexagon size={14} className="text-cyber-magenta" />
+                                <span className="text-cyber-magenta/60 text-xs uppercase tracking-wider">
+                                  {new Date(article.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                </span>
+                              </div>
+                              <h3 className="text-xl font-bold text-cyber-yellow mb-3 group-hover:text-white transition-colors">
+                                {article.title}
+                              </h3>
+                              <p className="text-white/70 text-sm mb-4 line-clamp-3">{article.content}</p>
+                              <button
+                                onClick={() => setSelectedNewsId(article.id)}
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-cyber-magenta/20 hover:bg-cyber-magenta/30 text-cyber-magenta border border-cyber-magenta/50 hover:border-cyber-magenta transition-colors text-sm font-bold uppercase corner-cut"
+                              >
+                                Lire
+                                <ChevronRight size={14} />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="cyber-panel p-8 text-center">
+                        <p className="text-cyber-magenta text-lg">Aucune news pour le moment.</p>
+                      </div>
+                    )}
+                  </>
                 ) : (
-                  <div className="cyber-panel p-8 text-center">
-                    <p className="text-cyber-magenta text-lg">Aucune actualité pour le moment.</p>
-                  </div>
+                  <>
+                    {(() => {
+                      const article = news.find(a => a.id === selectedNewsId)
+                      if (!article) return null
+                      
+                      return (
+                        <>
+                          <div className="cyber-panel p-6">
+                            <button
+                              onClick={() => setSelectedNewsId(null)}
+                              className="inline-flex items-center gap-2 text-cyber-magenta hover:text-cyber-yellow transition-colors text-sm font-bold uppercase mb-4"
+                            >
+                              <ChevronLeft size={16} />
+                              Retour aux news
+                            </button>
+                            <h2 className="text-3xl font-display font-black text-cyber-magenta mb-2">
+                              // NEWS
+                            </h2>
+                            <div className="cyber-divider my-4"></div>
+                          </div>
+
+                          <div className="cyber-panel p-6">
+                            {article.image && (
+                              <div className="mb-6">
+                                <img 
+                                  src={article.image} 
+                                  alt={article.title}
+                                  className="w-full max-h-96 object-cover corner-cut"
+                                />
+                              </div>
+                            )}
+                            <div className="flex items-center gap-3 mb-4">
+                              <Hexagon size={16} className="text-cyber-magenta" />
+                              <span className="text-cyber-magenta/60 text-sm uppercase tracking-wider">
+                                {new Date(article.date).toLocaleDateString('fr-FR', { 
+                                  weekday: 'long',
+                                  day: 'numeric', 
+                                  month: 'long', 
+                                  year: 'numeric' 
+                                })}
+                              </span>
+                            </div>
+                            <h3 className="text-3xl font-bold text-cyber-yellow mb-6">{article.title}</h3>
+                            <p className="text-white/90 text-lg mb-6 leading-relaxed whitespace-pre-line">{article.content}</p>
+                            {article.link && (
+                              <a 
+                                href={article.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-6 py-3 bg-cyber-magenta/20 hover:bg-cyber-magenta/30 text-cyber-magenta border border-cyber-magenta/50 hover:border-cyber-magenta transition-colors text-sm font-bold uppercase corner-cut"
+                              >
+                                En savoir plus
+                                <ExternalLink size={16} />
+                              </a>
+                            )}
+                          </div>
+                        </>
+                      )
+                    })()}
+                  </>
                 )}
               </div>
             )}

@@ -153,8 +153,8 @@ function pushToGitHub(content) {
       sha = fileData.sha;
     }
     
-    // 2. Encoder le contenu en base64
-    const encodedContent = Utilities.base64Encode(content);
+    // 2. Encoder le contenu en base64 avec UTF-8
+    const encodedContent = Utilities.base64Encode(content, Utilities.Charset.UTF_8);
     
     // 3. Créer/Mettre à jour le fichier
     const putUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
@@ -196,10 +196,10 @@ function pushToGitHub(content) {
 // ========== MENU PERSONNALISÉ ==========
 function onOpen() {
   DocumentApp.getUi()
-    .createMenu('🎸 Magenta News')
-    .addItem('📤 Publier sur le site', 'publishToGitHub')
-    .addItem('🔍 Prévisualiser JSON', 'previewJSON')
-    .addItem('ℹ️ Aide', 'showHelp')
+    .createMenu('Magenta News')
+    .addItem('Publier sur le site', 'publishToGitHub')
+    .addItem('Prévisualiser JSON', 'previewJSON')
+    .addItem('Aide', 'showHelp')
     .addToUi();
 }
 
@@ -224,7 +224,7 @@ function previewJSON() {
 
 function showHelp() {
   const helpText = `
-📝 Format de chaque onglet:
+Format de chaque onglet:
 
 Titre: Ton titre ici
 Date: 2026-04-29
@@ -237,10 +237,10 @@ Plusieurs paragraphes possibles.
 
 ---
 
-✅ Champs obligatoires: Titre, Date
-⚠️ Champs optionnels: Image, Lien, Contenu
+Champs obligatoires: Titre, Date
+Champs optionnels: Image, Lien, Contenu
 
-💡 Un onglet = un article
+Un onglet = un article
   `;
   
   DocumentApp.getUi().alert('Aide - Format des articles', helpText, DocumentApp.getUi().ButtonSet.OK);
