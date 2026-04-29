@@ -2,9 +2,9 @@
   {
     "id": 1,
     "title": "Test de publication",
-    "content": "Ceci est un **test** pour vérifier que le système *fonctionne correctement*.\n\n\n\n- Liste à puce\n\n- Liste à puce\n\n\n\n1. Liste numéroté\n\n1. Liste numéroté",
+    "content": "Ceci est un **test** pour vérifier que le système *fonctionne correctement*.\n\n\n\n- Liste à puce\n- Liste à puce\n\n\n\n1. Liste numéroté\n1. Liste numéroté",
     "date": "2026-04-29",
-    "image": "https://www.magenta-band.fr/media/img_media/magenta_band.png",
+    "image": "https://www.magenta-band.fr/media/news_magenta.png",
     "link": "https://www.magenta-band.fr/"
   }
 ]
