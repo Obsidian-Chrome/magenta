@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import { Music, Calendar, Download, ExternalLink, Hexagon, ChevronRight, Search, SlidersHorizontal, ChevronLeft } from 'lucide-react'
+import { Music, Calendar, Download, ExternalLink, Hexagon, ChevronRight, Search, SlidersHorizontal, ChevronLeft, Clock } from 'lucide-react'
 import AudioPlayer from './components/AudioPlayer'
 import MiniPlayer from './components/MiniPlayer'
 import ImageModal from './components/ImageModal'
+import FFXIVMacro from './components/FFXIVMacro'
 
 function App() {
   const [activeSection, setActiveSection] = useState('home')
-  const [data, setData] = useState({ albums: [], concerts: [], merch: [], media: [] })
+  const [data, setData] = useState({ albums: [], concerts: [], merch: [], media: [], news: [] })
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
   const [allTracks, setAllTracks] = useState([])
   const [fileSizes, setFileSizes] = useState({})
@@ -25,14 +26,23 @@ function App() {
   const lastUpdateRef = useRef(0)
 
   useEffect(() => {
+    // Détection du hash pour accès direct à la page macro
+    const hash = window.location.hash
+    if (hash === '#macro') {
+      setActiveSection('ffxiv-macro')
+    }
+  }, [])
+
+  useEffect(() => {
     Promise.all([
       fetch('albums.json').then(res => res.json()),
       fetch('concerts.json').then(res => res.json()),
       fetch('merch.json').then(res => res.json()),
-      fetch('media.json').then(res => res.json())
+      fetch('media.json').then(res => res.json()),
+      fetch('news.json').then(res => res.json())
     ])
-      .then(([albums, concerts, merch, media]) => {
-        setData({ albums, concerts, merch, media })
+      .then(([albums, concerts, merch, media, news]) => {
+        setData({ albums, concerts, merch, media, news })
         const tracks = albums.flatMap(album => 
           album.tracks.map(track => ({ ...track, album: album.title }))
         )
@@ -60,6 +70,7 @@ function App() {
   const albums = data.albums
   const merch = data.merch
   const media = data.media
+  const news = data.news
 
   const isPastConcert = (dateStr) => {
     return new Date(dateStr) < new Date()
@@ -272,6 +283,9 @@ function App() {
                 <NavButton onClick={() => setShowW2GModal(true)} active={false}>
                   W2G
                 </NavButton>
+                <NavButton onClick={() => setActiveSection('news')} active={activeSection === 'news'}>
+                  News
+                </NavButton>
                 <NavButton onClick={() => setActiveSection('concerts')} active={activeSection === 'concerts'}>
                   Concerts
                 </NavButton>
@@ -292,6 +306,37 @@ function App() {
           <main className="lg:col-span-3">
             {activeSection === 'home' && (
               <div className="space-y-6">
+                {news && news.length > 0 && (
+                  <div className="cyber-panel p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-2xl font-bold text-cyber-yellow flex items-center gap-3">
+                        <Hexagon size={24} />
+                        ACTUALITÉS
+                      </h3>
+                      <button
+                        onClick={() => setActiveSection('news')}
+                        className="text-cyber-magenta hover:text-cyber-yellow transition-colors text-sm font-bold uppercase flex items-center gap-2"
+                      >
+                        Voir tout
+                        <ChevronRight size={16} />
+                      </button>
+                    </div>
+                    <div className="space-y-4">
+                      {news.slice(0, 2).map((article) => (
+                        <div key={article.id} className="pb-4 border-b border-cyber-magenta/20 last:border-0">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-cyber-magenta/60 text-xs uppercase tracking-wider">
+                              {new Date(article.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            </span>
+                          </div>
+                          <h4 className="text-lg font-bold text-cyber-yellow mb-1">{article.title}</h4>
+                          <p className="text-white/70 text-sm line-clamp-2">{article.content}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="cyber-panel p-6">
                   <h3 className="text-2xl font-bold text-cyber-yellow mb-4 flex items-center gap-3">
                     <Music size={24} />
@@ -387,6 +432,65 @@ function App() {
                     })}
                   </div>
                 </div>
+              </div>
+            )}
+
+            {activeSection === 'news' && (
+              <div className="space-y-6">
+                <div className="cyber-panel p-6">
+                  <h2 className="text-3xl font-display font-black text-cyber-magenta mb-2">
+                    // ACTUALITÉS
+                  </h2>
+                  <div className="cyber-divider my-4"></div>
+                </div>
+
+                {news && news.length > 0 ? (
+                  news.map((article) => (
+                    <div key={article.id} className="cyber-panel p-6">
+                      <div className="flex flex-col md:flex-row gap-6">
+                        {article.image && (
+                          <div className="flex-shrink-0">
+                            <img 
+                              src={article.image} 
+                              alt={article.title}
+                              className="w-full md:w-48 h-48 object-cover corner-cut"
+                            />
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-3">
+                            <Hexagon size={16} className="text-cyber-magenta" />
+                            <span className="text-cyber-magenta/60 text-sm uppercase tracking-wider">
+                              {new Date(article.date).toLocaleDateString('fr-FR', { 
+                                weekday: 'long',
+                                day: 'numeric', 
+                                month: 'long', 
+                                year: 'numeric' 
+                              })}
+                            </span>
+                          </div>
+                          <h3 className="text-2xl font-bold text-cyber-yellow mb-3">{article.title}</h3>
+                          <p className="text-white/90 mb-4 leading-relaxed">{article.content}</p>
+                          {article.link && (
+                            <a 
+                              href={article.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 px-4 py-2 bg-cyber-magenta/20 hover:bg-cyber-magenta/30 text-cyber-magenta border border-cyber-magenta/50 transition-colors text-sm font-bold uppercase corner-cut"
+                            >
+                              En savoir plus
+                              <ExternalLink size={14} />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="cyber-panel p-8 text-center">
+                    <p className="text-cyber-magenta text-lg">Aucune actualité pour le moment.</p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -810,6 +914,10 @@ function App() {
               </div>
             )}
 
+            {activeSection === 'ffxiv-macro' && (
+              <FFXIVMacro />
+            )}
+
             {activeSection === 'about' && (
               <div className="space-y-6">
                 <div className="cyber-panel p-6">
@@ -877,19 +985,114 @@ function App() {
                     </div>
                   </div>
                 </div>
+
+                <div className="cyber-panel p-8">
+                  <h3 className="text-2xl font-bold text-cyber-yellow mb-6">PARTENAIRES</h3>
+                  
+                  <div className="flex flex-col md:flex-row gap-8 items-start">
+                    <div className="flex-shrink-0 flex flex-col items-center gap-3">
+                      <a 
+                        href="https://discord.gg/f32rrfRfcA"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block transition-opacity hover:opacity-80"
+                      >
+                        <img 
+                          src="media/img_partner/img_lawless.png" 
+                          alt="Lawless"
+                          className="h-32 w-auto object-contain"
+                        />
+                      </a>
+                      <h4 className="text-2xl font-bold text-cyber-yellow uppercase tracking-wider">LAWLESS</h4>
+                    </div>
+                    
+                    <div className="flex-1 space-y-6">
+                      <div className="text-white/90 space-y-3">
+                        <p className="text-lg">
+                          Marque née dans l'ombre des néons, inspirée des univers <span className="text-cyber-magenta font-bold">punk, grunge, goth et rock</span>. 
+                          LAWLESS fusionne attitude brute et esthétique sombre.
+                        </p>
+                        <p className="italic text-cyber-yellow text-lg">Wear the night. Break the codes.</p>
+                      </div>
+                      
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-3">
+                            <Clock size={20} className="text-cyber-yellow flex-shrink-0" />
+                            <div>
+                              <p className="text-cyber-yellow font-bold text-sm uppercase">Horaires</p>
+                              <p className="text-white/90">09h00 - 17h00</p>
+                              <p className="text-white/60 text-xs">avec PNJ ou sur RDV</p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex items-start gap-3">
+                            <ExternalLink size={20} className="text-cyber-yellow flex-shrink-0 mt-1" />
+                            <div>
+                              <p className="text-cyber-yellow font-bold text-sm uppercase">Adresse</p>
+                              <p className="text-white/90 text-sm">Solution neuf - 7ème district</p>
+                              <p className="text-white/60 text-xs">HRP : [Ragnarok] La Coupe (Annexe) 17 - Appartement 4</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </main>
         </div>
 
-        <footer className="cyber-panel p-6 text-center">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-white/60 text-sm uppercase tracking-wider">
-              © {new Date().getFullYear()} MAGENTA - TOUS DROITS RÉSERVÉS
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-3 bg-cyber-magenta rounded-full animate-pulse"></div>
-              <span className="text-cyber-magenta font-bold uppercase text-sm">SYSTEM ONLINE</span>
+        <footer className="mt-12 py-8 border-t border-cyber-magenta/20">
+          <div className="max-w-7xl mx-auto px-4 space-y-6">
+            <div className="flex items-center justify-center gap-10">
+              <a 
+                href="https://discord.gg/KKJSb3rKjD"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative"
+              >
+                <img 
+                  src="media/img_partner/img_nexus.png" 
+                  alt="Nexus"
+                  className="h-16 w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                />
+                <span className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                  <span className="relative inline-block px-4 py-2 bg-black text-white text-xs font-bold uppercase whitespace-nowrap border-2 border-transparent bg-clip-padding" style={{clipPath: 'polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)', backgroundImage: 'linear-gradient(black, black), linear-gradient(135deg, #ff00ff, #ffff00)', backgroundOrigin: 'border-box', backgroundClip: 'padding-box, border-box'}}>
+                    Annuaire RP Cyber
+                  </span>
+                </span>
+              </a>
+              <a 
+                href="https://discord.gg/f32rrfRfcA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative"
+              >
+                <img 
+                  src="media/img_partner/img_lawless.png" 
+                  alt="Lawless"
+                  className="h-16 w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                />
+                <span className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                  <span className="relative inline-block px-4 py-2 bg-black text-white text-xs font-bold uppercase whitespace-nowrap border-2 border-transparent bg-clip-padding" style={{clipPath: 'polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)', backgroundImage: 'linear-gradient(black, black), linear-gradient(135deg, #ff00ff, #ffff00)', backgroundOrigin: 'border-box', backgroundClip: 'padding-box, border-box'}}>
+                    Boutique de vêtements
+                  </span>
+                </span>
+              </a>
+            </div>
+            
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+              <p className="text-white/40 text-xs uppercase tracking-wider">
+                © {new Date().getFullYear()} MAGENTA
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 bg-cyber-magenta rounded-full animate-pulse"></div>
+                <span className="text-cyber-magenta font-bold uppercase text-xs">SYSTEM ONLINE</span>
+              </div>
             </div>
           </div>
         </footer>
