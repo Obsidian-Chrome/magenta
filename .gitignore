@@ -10,3 +10,6 @@ dist/
 
 # Logs
 *.log
+
+# Scripts avec tokens sensibles
+scripts/google-docs-tabs-to-github.gs

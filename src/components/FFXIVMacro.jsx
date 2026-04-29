@@ -152,7 +152,7 @@ function FFXIVMacro() {
             onChange={handleTextChange}
             onClick={handleCursorChange}
             onKeyUp={handleCursorChange}
-            placeholder="/y [Emote]&#10;&lt;wait.XX&gt;&#10;/y Texte"
+            placeholder="/y [Emote] <wait.XX>&#10;/y Texte&#10;/dance"
             className="w-full h-96 px-4 py-3 bg-black/50 text-white placeholder-gray-600 border border-cyber-magenta/30 focus:border-cyber-magenta focus:outline-none transition-colors font-mono text-sm resize-none"
             spellCheck="false"
           />
