@@ -1,2 +1,10 @@
 [
+  {
+    "id": 1,
+    "title": "Test de publication",
+    "content": "Ceci est un test pour v?rifier que le syst?me fonctionne correctement. ```",
+    "date": "2026-04-29",
+    "image": "",
+    "link": ""
+  }
 ]
