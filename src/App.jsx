@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { Music, Calendar, Download, ExternalLink, Hexagon, ChevronRight, Search, SlidersHorizontal, ChevronLeft, Clock } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import AudioPlayer from './components/AudioPlayer'
 import MiniPlayer from './components/MiniPlayer'
 import ImageModal from './components/ImageModal'
@@ -397,7 +399,9 @@ function App() {
                             </span>
                           </div>
                           <h4 className="text-lg font-bold text-cyber-yellow mb-1 group-hover:text-white transition-colors">{article.title}</h4>
-                          <p className="text-white/70 text-sm line-clamp-2">{article.content}</p>
+                          <div className="text-white/70 text-sm line-clamp-2 prose prose-invert prose-sm max-w-none">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
+                          </div>
                           <div className="mt-2 text-cyber-magenta text-xs uppercase flex items-center gap-1">
                             Lire l'article <ChevronRight size={14} />
                           </div>
@@ -542,7 +546,9 @@ function App() {
                               <h3 className="text-xl font-bold text-cyber-yellow mb-3 group-hover:text-white transition-colors">
                                 {article.title}
                               </h3>
-                              <p className="text-white/70 text-sm mb-4 line-clamp-3">{article.content}</p>
+                              <div className="text-white/70 text-sm mb-4 line-clamp-3 prose prose-invert prose-sm max-w-none">
+                                <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
+                              </div>
                               <button
                                 onClick={() => setSelectedNewsId(article.id)}
                                 className="inline-flex items-center gap-2 px-4 py-2 bg-cyber-magenta/20 hover:bg-cyber-magenta/30 text-cyber-magenta border border-cyber-magenta/50 hover:border-cyber-magenta transition-colors text-sm font-bold uppercase corner-cut"
@@ -604,7 +610,9 @@ function App() {
                               </span>
                             </div>
                             <h3 className="text-3xl font-bold text-cyber-yellow mb-6">{article.title}</h3>
-                            <p className="text-white/90 text-lg mb-6 leading-relaxed whitespace-pre-line">{article.content}</p>
+                            <div className="text-white/90 text-lg mb-6 leading-relaxed prose prose-invert prose-lg max-w-none">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
+                            </div>
                             {article.link && (
                               <a 
                                 href={article.link}

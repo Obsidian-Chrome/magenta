@@ -92,9 +92,9 @@ function parseTab(tab, articleId) {
     };
     
     let inContent = false;
-    let contentLines = [];
+    let contentStartIndex = -1;
     
-    lines.forEach(line => {
+    lines.forEach((line, idx) => {
       if (line.startsWith('Titre:')) {
         article.title = line.replace('Titre:', '').trim();
       } else if (line.startsWith('Date:')) {
@@ -105,12 +105,14 @@ function parseTab(tab, articleId) {
         article.link = line.replace('Lien:', '').trim();
       } else if (line === 'Contenu:') {
         inContent = true;
-      } else if (inContent) {
-        contentLines.push(line);
+        contentStartIndex = idx;
       }
     });
     
-    article.content = contentLines.join(' ');
+    // Extraire le contenu avec formatage Markdown
+    if (inContent && contentStartIndex >= 0) {
+      article.content = extractMarkdownContent(body, contentStartIndex);
+    }
     
     // Si pas de titre/date/contenu explicites, utiliser le nom de l'onglet comme titre
     if (!article.title) {
@@ -129,6 +131,92 @@ function parseTab(tab, articleId) {
     Logger.log('Erreur parsing onglet: ' + error);
     return null;
   }
+}
+
+// ========== EXTRAIRE LE CONTENU EN MARKDOWN ==========
+function extractMarkdownContent(body, contentStartIndex) {
+  const numChildren = body.getNumChildren();
+  const markdownLines = [];
+  let foundContentMarker = false;
+  
+  for (let i = 0; i < numChildren; i++) {
+    const child = body.getChild(i);
+    const childType = child.getType();
+    
+    if (childType === DocumentApp.ElementType.PARAGRAPH) {
+      const paragraph = child.asParagraph();
+      const text = paragraph.getText().trim();
+      
+      // Skip jusqu'à trouver "Contenu:"
+      if (!foundContentMarker) {
+        if (text === 'Contenu:') {
+          foundContentMarker = true;
+        }
+        continue;
+      }
+      
+      // Skip les lignes vides
+      if (!text) {
+        markdownLines.push('');
+        continue;
+      }
+      
+      // Extraire le texte avec formatage
+      const formattedText = extractFormattedText(paragraph);
+      markdownLines.push(formattedText);
+      
+    } else if (childType === DocumentApp.ElementType.LIST_ITEM) {
+      const listItem = child.asListItem();
+      const text = listItem.getText().trim();
+      
+      if (!foundContentMarker) continue;
+      if (!text) continue;
+      
+      const formattedText = extractFormattedText(listItem);
+      const glyphType = listItem.getGlyphType();
+      
+      // Liste numérotée ou à puces
+      if (glyphType === DocumentApp.GlyphType.NUMBER) {
+        markdownLines.push('1. ' + formattedText);
+      } else {
+        markdownLines.push('- ' + formattedText);
+      }
+    }
+  }
+  
+  return markdownLines.join('\n\n');
+}
+
+// ========== EXTRAIRE LE TEXTE AVEC FORMATAGE ==========
+function extractFormattedText(element) {
+  const text = element.getText();
+  const indices = element.getTextAttributeIndices();
+  let result = '';
+  
+  for (let i = 0; i < indices.length; i++) {
+    const startOffset = indices[i];
+    const endOffset = i + 1 < indices.length ? indices[i + 1] : text.length;
+    const partialText = text.substring(startOffset, endOffset);
+    
+    if (!partialText) continue;
+    
+    const isBold = element.isBold(startOffset);
+    const isItalic = element.isItalic(startOffset);
+    
+    let formattedText = partialText;
+    
+    if (isBold && isItalic) {
+      formattedText = '***' + partialText + '***';
+    } else if (isBold) {
+      formattedText = '**' + partialText + '**';
+    } else if (isItalic) {
+      formattedText = '*' + partialText + '*';
+    }
+    
+    result += formattedText;
+  }
+  
+  return result;
 }
 
 // ========== PUSH SUR GITHUB ==========
