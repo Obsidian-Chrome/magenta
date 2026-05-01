@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import { Music, Calendar, Download, ExternalLink, Hexagon, ChevronRight, Search, SlidersHorizontal, ChevronLeft, Clock } from 'lucide-react'
+import { Music, Calendar, Download, ExternalLink, Hexagon, ChevronRight, Search, SlidersHorizontal, ChevronLeft, Clock, FileCode } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import AudioPlayer from './components/AudioPlayer'
