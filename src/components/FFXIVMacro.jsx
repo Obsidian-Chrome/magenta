@@ -8,7 +8,6 @@ function FFXIVMacro() {
   const [showClearModal, setShowClearModal] = useState(false)
   const [showCopySuccess, setShowCopySuccess] = useState(false)
   const textareaRef = useRef(null)
-  const highlightRef = useRef(null)
   
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60)
@@ -83,13 +82,6 @@ function FFXIVMacro() {
     setCursorPosition(e.target.selectionStart)
   }
   
-  const handleScroll = () => {
-    if (textareaRef.current && highlightRef.current) {
-      highlightRef.current.scrollTop = textareaRef.current.scrollTop
-      highlightRef.current.scrollLeft = textareaRef.current.scrollLeft
-    }
-  }
-  
   const handleCursorChange = () => {
     if (textareaRef.current) {
       setCursorPosition(textareaRef.current.selectionStart)
@@ -150,14 +142,6 @@ function FFXIVMacro() {
     
     setMacroText(macroLines.join('\n'))
     setCursorPosition(0)
-  }
-  
-  const highlightSyntax = (text) => {
-    // Remplacer les commandes (/echo, /y, etc.) en jaune
-    let highlighted = text.replace(/(\/\w+)/g, '<span style="color: #ffff00;">$1</span>')
-    // Remplacer les <wait.XX> en rose/magenta (dès que wait se trouve entre <>)
-    highlighted = highlighted.replace(/(&lt;wait\.[^&]*&gt;)/g, '<span style="color: #ff00ff;">$1</span>')
-    return highlighted
   }
   
   const processBlock = (block, macroLines) => {
@@ -305,27 +289,16 @@ function FFXIVMacro() {
         </div>
         
         <div className="cyber-panel p-6">
-          <div className="relative w-full h-96 bg-black/50 border border-cyber-magenta/30 focus-within:border-cyber-magenta transition-colors rounded">
-            <div 
-              ref={highlightRef}
-              className="absolute inset-0 px-4 py-3 font-mono text-sm overflow-auto whitespace-pre-wrap break-words pointer-events-none"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              <div dangerouslySetInnerHTML={{ __html: highlightSyntax(macroText.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br/>') || '&nbsp;') }} />
-            </div>
-            <textarea
-              ref={textareaRef}
-              value={macroText}
-              onChange={handleTextChange}
-              onClick={handleCursorChange}
-              onKeyUp={handleCursorChange}
-              onScroll={handleScroll}
-              placeholder="/y [Emote] <wait.XX>&#10;/y Texte&#10;/dance"
-              className="absolute inset-0 w-full h-full px-4 py-3 bg-transparent text-transparent caret-white placeholder-gray-600 focus:outline-none font-mono text-sm resize-none"
-              style={{ caretColor: 'white' }}
-              spellCheck="false"
-            />
-          </div>
+          <textarea
+            ref={textareaRef}
+            value={macroText}
+            onChange={handleTextChange}
+            onClick={handleCursorChange}
+            onKeyUp={handleCursorChange}
+            placeholder="/y [Emote] <wait.XX>&#10;/y Texte&#10;/dance"
+            className="w-full h-96 px-4 py-3 bg-black/50 text-white placeholder-gray-600 border border-cyber-magenta/30 focus:border-cyber-magenta focus:outline-none transition-colors font-mono text-sm resize-none rounded"
+            spellCheck="false"
+          />
         </div>
       </div>
       

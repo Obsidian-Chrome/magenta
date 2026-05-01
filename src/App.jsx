@@ -1226,7 +1226,7 @@ function App() {
             
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
               <p className="text-white/40 text-xs uppercase tracking-wider">
-                © {new Date().getFullYear()} MAGENTA
+                © {new Date().getFullYear()} MAGENTA - <span onClick={() => setActiveSection('ffxiv-macro')} className="hover:text-white/60 cursor-pointer transition-colors">ÉDITEUR MACROS</span>
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-3 h-3 bg-cyber-magenta rounded-full animate-pulse"></div>
