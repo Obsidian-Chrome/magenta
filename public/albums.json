@@ -18,6 +18,11 @@
         "name": "Crimson Safari",
         "youtube": "https://youtube.com/watch?v=example2",
         "mp3": "media/mp3/MAGENTA - CRIMSON SAFARI.mp3"
+      },
+      {
+        "name": "Ouroboros",
+        "youtube": "https://youtube.com/watch?v=example3",
+        "mp3": "media/mp3/MAGENTA - OUROBOROS.mp3"
       }
     ]
   }
