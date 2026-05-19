@@ -2,36 +2,36 @@
   {
     "title": "1er Album",
     "cover": "media/img_albums/album_1.png",
-    "youtubeAlbumLink": "https://www.youtube.com/watch?v=TnT6DZ5CXwc&list=PL8N3Qhb8mPW8g2CHa1DVm584h5jMQy3uu",
+    "youtubeAlbumLink": "https://www.youtube.com/playlist?list=PL8N3Qhb8mPW8g2CHa1DVm584h5jMQy3uu",
     "tracks": [
       {
         "name": "Eat The Rich",
-        "youtube": "https://www.youtube.com/watch?v=TnT6DZ5CXwc",
+        "youtube": "https://youtu.be/SsAKquZeZ1Y",
         "mp3": "media/mp3/MAGENTA - EAT THE RICH.mp3"
       },
       {
         "name": "The Woman In Yellow",
-        "youtube": "https://www.youtube.com/watch?v=JoZOGrxqb9E",
+        "youtube": "https://youtu.be/-JjvASKKPpo",
         "mp3": "media/mp3/MAGENTA - THE WOMAN IN YELLOW.mp3"
       },
       {
         "name": "Crimson Safari",
-        "youtube": "https://www.youtube.com/watch?v=_WrWvqGbrms",
+        "youtube": "https://youtu.be/0UjqU6-k7_g",
         "mp3": "media/mp3/MAGENTA - CRIMSON SAFARI.mp3"
       },
       {
         "name": "Ouroboros",
-        "youtube": "https://www.youtube.com/watch?v=rp0xSnGxVcs",
+        "youtube": "https://youtu.be/-PHcpinZL4Q",
         "mp3": "media/mp3/MAGENTA - OUROBOROS.mp3"
       },
       {
         "name": "Under My Skin",
-        "youtube": "https://www.youtube.com/watch?v=TNsHXGEHfWE",
+        "youtube": "https://youtu.be/TsgeTjprzIk",
         "mp3": "media/mp3/MAGENTA - UNDER MY SKIN.mp3"
       },
       {
         "name": "Cattle",
-        "youtube": "https://www.youtube.com/watch?v=M03OfQjfLC4",
+        "youtube": "https://youtu.be/uTEpYeJEEXM",
         "mp3": "media/mp3/MAGENTA - CATTLE.mp3"
       }
     ]
