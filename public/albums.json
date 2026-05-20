@@ -2,7 +2,7 @@
   {
     "title": "1er Album",
     "cover": "media/img_albums/album_1.png",
-    "youtubeAlbumLink": "https://www.youtube.com/playlist?list=PL8N3Qhb8mPW8g2CHa1DVm584h5jMQy3uu",
+    "youtubeAlbumLink": "https://youtube.com/playlist?list=PL8N3Qhb8mPW8g2CHa1DVm584h5jMQy3uu&si=a737MZWqg9sFWjzU",
     "tracks": [
       {
         "name": "Eat The Rich",
@@ -33,6 +33,11 @@
         "name": "Cattle",
         "youtube": "https://youtu.be/uTEpYeJEEXM",
         "mp3": "media/mp3/MAGENTA - CATTLE.mp3"
+      },
+      {
+        "name": "What Did You Think",
+        "youtube": "https://youtu.be/ij_CP9VfTMU",
+        "mp3": "media/mp3/MAGENTA - WHAT DID YOU THINK.mp3"
       }
     ]
   }
