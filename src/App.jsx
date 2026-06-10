@@ -20,13 +20,11 @@ function App() {
   const [merchSort, setMerchSort] = useState('az')
   const [selectedTags, setSelectedTags] = useState([])
   const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [shuffle, setShuffle] = useState(false)
   const [repeat, setRepeat] = useState('none')
   const [showW2GModal, setShowW2GModal] = useState(false)
   const audioRef = useRef(null)
-  const lastUpdateRef = useRef(0)
 
   useEffect(() => {
     // Détection du hash pour accès direct aux sections
@@ -196,27 +194,10 @@ function App() {
     return filtered
   }, [merch, merchSearch, merchSort, selectedTags])
 
-  const handleTimeUpdate = useCallback(() => {
-    if (audioRef.current) {
-      const now = Date.now()
-      if (now - lastUpdateRef.current >= 500) {
-        setCurrentTime(audioRef.current.currentTime)
-        lastUpdateRef.current = now
-      }
-    }
-  }, [])
-
   const handleLoadedMetadata = useCallback(() => {
     if (audioRef.current) {
       setDuration(audioRef.current.duration)
       audioRef.current.volume = 0.5
-    }
-  }, [])
-
-  const handleSeek = useCallback((newTime) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = newTime
-      setCurrentTime(newTime)
     }
   }, [])
 
@@ -419,7 +400,7 @@ function App() {
                   <div className="space-y-2">
                     {albums.flatMap(album => 
                       album.tracks.map(track => ({ ...track, album: album.title }))
-                    ).slice(0, 3).map((track, idx) => {
+                    ).slice(-3).reverse().map((track, idx) => {
                       const globalTrackIndex = allTracks.findIndex(
                         t => t.name === track.name && t.album === track.album
                       )
@@ -650,9 +631,7 @@ function App() {
                     isPlaying={isPlaying}
                     setIsPlaying={setIsPlaying}
                     audioRef={audioRef}
-                    currentTime={currentTime}
                     duration={duration}
-                    onSeek={handleSeek}
                     shuffle={shuffle}
                     setShuffle={setShuffle}
                     repeat={repeat}
@@ -1189,7 +1168,7 @@ function App() {
           <div className="max-w-7xl mx-auto px-4 space-y-6">
             <div className="flex items-center justify-center gap-10">
               <a 
-                href="https://discord.gg/KKJSb3rKjD"
+                href="https://www.nexusxiv.fr/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative"
@@ -1241,7 +1220,6 @@ function App() {
         <audio
           ref={audioRef}
           src={allTracks[currentTrackIndex].mp3}
-          onTimeUpdate={handleTimeUpdate}
           onLoadedMetadata={handleLoadedMetadata}
           onEnded={handleEnded}
         />

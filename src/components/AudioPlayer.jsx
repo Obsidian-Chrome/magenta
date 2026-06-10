@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Shuffle, Repeat, Repeat1 } from 'lucide-react'
 
-function AudioPlayer({ tracks, currentTrackIndex, onTrackChange, isPlaying, setIsPlaying, audioRef, currentTime, duration, onSeek, shuffle, setShuffle, repeat, setRepeat, onNext, onPrev }) {
+function AudioPlayer({ tracks, currentTrackIndex, onTrackChange, isPlaying, setIsPlaying, audioRef, duration, shuffle, setShuffle, repeat, setRepeat, onNext, onPrev }) {
   const [volume, setVolume] = useState(() => {
     const savedVolume = localStorage.getItem('magenta-volume')
     return savedVolume ? parseFloat(savedVolume) : 0.5
   })
   const [isMuted, setIsMuted] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
 
   const currentTrack = tracks[currentTrackIndex]
 
@@ -26,9 +27,24 @@ function AudioPlayer({ tracks, currentTrackIndex, onTrackChange, isPlaying, setI
     setIsPlaying(!isPlaying)
   }
 
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    const updateTime = () => {
+      setCurrentTime(audio.currentTime)
+    }
+
+    audio.addEventListener('timeupdate', updateTime)
+    return () => audio.removeEventListener('timeupdate', updateTime)
+  }, [audioRef])
+
   const handleSeek = (e) => {
     const newTime = (e.target.value / 100) * duration
-    onSeek(newTime)
+    if (audioRef.current) {
+      audioRef.current.currentTime = newTime
+      setCurrentTime(newTime)
+    }
   }
 
   const handleVolumeChange = (e) => {
