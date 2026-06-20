@@ -38,6 +38,26 @@
         "name": "What Did You Think",
         "youtube": "https://youtu.be/ij_CP9VfTMU",
         "mp3": "media/mp3/MAGENTA - WHAT DID YOU THINK.mp3"
+      },
+      {
+        "name": "Tea Time",
+        "youtube": "https://youtu.be/R7H5tieTR08",
+        "mp3": "media/mp3/MAGENTA - TEA TIME.mp3"
+      },
+      {
+        "name": "Let Them Burn",
+        "youtube": "https://youtu.be/5KpFbt__JGA",
+        "mp3": "media/mp3/MAGENTA - LET THEM BURN.mp3"
+      },
+      {
+        "name": "Nofuckingway",
+        "youtube": "https://youtu.be/-BW1EBshmew",
+        "mp3": "media/mp3/MAGENTA - NOFUCKINGWAY.mp3"
+      },
+      {
+        "name": "Before I Pull The Pin",
+        "youtube": "https://youtu.be/b_BU0X2ZP3s",
+        "mp3": "media/mp3/MAGENTA - BEFORE I PULL THE PIN.mp3"
       }
     ]
   }
