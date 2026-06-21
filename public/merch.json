@@ -10,5 +10,12 @@
     "images": ["media/img_merch/holo_mask_magenta.png"],
     "file": "media/pmp/CLVB_Holo_Mask_MagentaEdit.pmp",
     "tags": ["Accessoire", "Unisexe"]
+  },
+  {
+    "name": "Sarun Hair For Most - Magenta",
+    "images": ["media/img_merch/sarun_1.png", "media/img_merch/sarun_2.png"],
+    "file": "https://github.com/Obsidian-Chrome/magenta/releases/download/merch-v1/Sarun_Hair_For_Most_MagentaEdit.pmp",
+    "size": "50.2 Mo",
+    "tags": ["Cheveux", "Unisexe"]
   }
 ]

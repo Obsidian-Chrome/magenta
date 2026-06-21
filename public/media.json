@@ -11,7 +11,17 @@
   },
   {
     "url": "media/molotov_magenta.png",
-    "title": "Logo Magenta molotov",
-    "category": "Logo"
+    "title": "Magenta molotov",
+    "category": "Dessin"
+  },
+  {
+    "url": "media/img_media/jett_viv.png",
+    "title": "Illustration Jett - Vivaldi",
+    "category": "Dessin"
+  },
+  {
+    "url": "media/img_media/magenta_nofuckingway.png",
+    "title": "Nofuckingway molotov",
+    "category": "Dessin"
   }
 ]

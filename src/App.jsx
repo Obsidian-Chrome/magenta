@@ -14,11 +14,15 @@ function App() {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
   const [allTracks, setAllTracks] = useState([])
   const [fileSizes, setFileSizes] = useState({})
+  const [imageRatios, setImageRatios] = useState({})
   const [selectedImage, setSelectedImage] = useState(null)
   const [selectedImageName, setSelectedImageName] = useState('')
   const [merchSearch, setMerchSearch] = useState('')
   const [merchSort, setMerchSort] = useState('az')
   const [selectedTags, setSelectedTags] = useState([])
+  const [mediaSearch, setMediaSearch] = useState('')
+  const [mediaSort, setMediaSort] = useState('default')
+  const [selectedMediaTags, setSelectedMediaTags] = useState([])
   const [isPlaying, setIsPlaying] = useState(false)
   const [duration, setDuration] = useState(0)
   const [shuffle, setShuffle] = useState(false)
@@ -121,6 +125,25 @@ function App() {
     })
   }, [data.merch])
 
+  useEffect(() => {
+    data.media.forEach(item => {
+      const img = new Image()
+      img.onload = () => {
+        const ratio = img.width / img.height
+        let aspectClass
+        if (ratio > 1.3) {
+          aspectClass = 'aspect-[2/1]'
+        } else if (ratio < 0.77) {
+          aspectClass = 'aspect-[2/3]'
+        } else {
+          aspectClass = 'aspect-square'
+        }
+        setImageRatios(prev => ({ ...prev, [item.url]: aspectClass }))
+      }
+      img.src = item.url
+    })
+  }, [data.media])
+
   const albums = data.albums
   const merch = data.merch
   const media = data.media
@@ -193,6 +216,48 @@ function App() {
 
     return filtered
   }, [merch, merchSearch, merchSort, selectedTags])
+
+  const allMediaTags = useMemo(() => {
+    const tags = new Set()
+    media.forEach(item => {
+      if (item.category) {
+        tags.add(item.category)
+      }
+    })
+    return Array.from(tags).sort()
+  }, [media])
+
+  const toggleMediaTag = (tag) => {
+    setSelectedMediaTags(prev => 
+      prev.includes(tag) 
+        ? prev.filter(t => t !== tag)
+        : [...prev, tag]
+    )
+  }
+
+  const filteredAndSortedMedia = useMemo(() => {
+    let filtered = [...media]
+
+    if (mediaSearch) {
+      filtered = filtered.filter(item =>
+        item.title.toLowerCase().includes(mediaSearch.toLowerCase())
+      )
+    }
+
+    if (selectedMediaTags.length > 0) {
+      filtered = filtered.filter(item =>
+        item.category && selectedMediaTags.includes(item.category)
+      )
+    }
+
+    if (mediaSort === 'az') {
+      filtered.sort((a, b) => a.title.localeCompare(b.title))
+    } else if (mediaSort === 'za') {
+      filtered.sort((a, b) => b.title.localeCompare(a.title))
+    }
+
+    return filtered
+  }, [media, mediaSearch, mediaSort, selectedMediaTags])
 
   const handleLoadedMetadata = useCallback(() => {
     if (audioRef.current) {
@@ -798,6 +863,13 @@ function App() {
                     )
                   })}
                 </div>
+
+                {concerts.length === 0 && (
+                  <div className="cyber-panel p-8 text-center">
+                    <p className="text-cyber-magenta text-lg mb-2">Aucun concert prévu pour le moment.</p>
+                    <p className="text-white/70 text-sm">Stay tuned pour les prochaines dates !</p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -943,9 +1015,9 @@ function App() {
                               ))}
                             </div>
                           )}
-                          {fileSizes[item.file] && (
+                          {(item.size || fileSizes[item.file]) && (
                             <div className="text-cyber-magenta text-sm">
-                              Taille: {fileSizes[item.file]} MO
+                              Taille: {item.size || `${fileSizes[item.file]} MO`}
                             </div>
                           )}
                         </div>
@@ -980,13 +1052,68 @@ function App() {
                     // MEDIA
                   </h2>
                   <div className="cyber-divider my-4"></div>
+                  
+                  <div className="grid md:grid-cols-2 gap-4 mt-4">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-cyber-magenta" size={20} />
+                      <input
+                        type="text"
+                        placeholder="Rechercher un média..."
+                        value={mediaSearch}
+                        onChange={(e) => setMediaSearch(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 bg-black/50 border border-cyber-magenta/30 text-white placeholder-cyber-magenta/50 focus:border-cyber-magenta focus:outline-none transition-colors corner-cut"
+                      />
+                    </div>
+                    
+                    <div className="relative">
+                      <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 text-cyber-yellow" size={20} />
+                      <select
+                        value={mediaSort}
+                        onChange={(e) => setMediaSort(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 bg-black/50 border border-cyber-yellow/30 text-white focus:border-cyber-yellow focus:outline-none transition-colors corner-cut appearance-none cursor-pointer"
+                      >
+                        <option value="default">Ordre original</option>
+                        <option value="az">Tri A → Z</option>
+                        <option value="za">Tri Z → A</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {allMediaTags.length > 0 && (
+                    <div className="mt-4">
+                      <h3 className="text-cyber-yellow font-bold text-sm mb-3 uppercase">Filtrer par tags:</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {allMediaTags.map((tag, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => toggleMediaTag(tag)}
+                            className={`px-3 py-2 text-xs font-bold uppercase border transition-all duration-200 ${
+                              selectedMediaTags.includes(tag)
+                                ? 'bg-cyber-magenta text-black border-cyber-magenta'
+                                : 'bg-cyber-magenta/10 text-cyber-yellow border-cyber-magenta/40 hover:border-cyber-magenta'
+                            }`}
+                          >
+                            {tag}
+                          </button>
+                        ))}
+                      </div>
+                      {selectedMediaTags.length > 0 && (
+                        <button
+                          onClick={() => setSelectedMediaTags([])}
+                          className="mt-3 text-cyber-yellow hover:text-white text-xs underline transition-colors"
+                        >
+                          Réinitialiser les filtres
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {media.map((item, idx) => {
-                    const pattern = idx % 3
-                    const isRectangle = pattern === 0
-                    const gridClass = isRectangle ? 'md:col-span-2 md:row-span-1' : 'md:col-span-1 md:row-span-1'
+                  {filteredAndSortedMedia.map((item, idx) => {
+                    const aspectClass = imageRatios[item.url] || 'aspect-square'
+                    const isWide = aspectClass === 'aspect-[2/1]'
+                    const gridClass = isWide ? 'md:col-span-2 md:row-span-1' : 'md:col-span-1 md:row-span-1'
                     
                     return (
                       <button
@@ -1003,7 +1130,7 @@ function App() {
                       >
                         <div className="absolute inset-0 bg-gradient-to-br from-cyber-magenta/20 to-cyber-yellow/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"></div>
                         
-                        <div className={`relative overflow-hidden w-full h-full ${isRectangle ? 'aspect-[2/1]' : 'aspect-square'}`}>
+                        <div className={`relative overflow-hidden w-full h-full ${aspectClass}`}>
                           <img 
                             src={item.url}
                             alt={item.title}
@@ -1024,9 +1151,9 @@ function App() {
                   })}
                 </div>
 
-                {media.length === 0 && (
+                {filteredAndSortedMedia.length === 0 && (
                   <div className="cyber-panel p-8 text-center">
-                    <p className="text-cyber-magenta text-lg">Aucune photo disponible pour le moment.</p>
+                    <p className="text-cyber-magenta text-lg">Aucun média trouvé avec ces critères.</p>
                   </div>
                 )}
               </div>
