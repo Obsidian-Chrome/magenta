@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "venue": "Les Lames et Les Roses",
+    "date": "2026-08-21",
+    "time": "21h00 - 00h00",
+    "city": "La Coupe 20 - 19 | Phantom",
+    "discord": "https://discord.gg/fYpgUkGSRk"
+  },
+  {
+    "venue": "Deadwire",
+    "date": "2026-09-14",
+    "time": "21h00 - 23h00",
+    "city": "La Coupe 2 - 6 | Ragnarok",
+    "discord": "https://discord.gg/QC6CEGcpgq",
+    "site": "https://www.deadwire.fr/"
+  }
+]
