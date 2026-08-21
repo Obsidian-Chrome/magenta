@@ -150,7 +150,9 @@ function App() {
   const news = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date))
 
   const isPastConcert = (dateStr) => {
-    return new Date(dateStr) < new Date()
+    const concertDate = new Date(dateStr)
+    concertDate.setHours(23, 59, 59, 999)
+    return concertDate < new Date()
   }
 
   const sortedConcerts = useMemo(() => {
