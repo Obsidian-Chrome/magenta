@@ -1,6 +1,6 @@
 [
   {
-    "name": "Veste Magenta - Homme",
+    "name": "Veste Magenta - M",
     "images": ["media/img_merch/veste_magenta_1.png","media/img_merch/veste_magenta_2.png","media/img_merch/veste_magenta_3.png"],
     "file": "media/pmp/NY_Varsity_Jacket_MagentaEdit.pmp",
     "tags": ["Haut", "TBSE-X", "TBSE Chonk", "Homme"]
@@ -17,5 +17,29 @@
     "file": "https://github.com/Obsidian-Chrome/magenta/releases/download/merch-v1/Sarun_Hair_For_Most_MagentaEdit.pmp",
     "size": "50.2 Mo",
     "tags": ["Cheveux", "Unisexe"]
+  },
+  {
+    "name": "T-shirt Magenta F",
+    "images": ["media/smiley_magenta.png"],
+    "file": "media/pmp/Magenta_tshirt_F.pmp",
+    "tags": ["Haut", "Rue", "Bibo", "Bimbo", "Uranus", "Yab", "Lavabod", "RueXB+", "Femme"]
+  },
+  {
+    "name": "T-shirt Magenta F-Alt",
+    "images": ["media/smiley_magenta.png"],
+    "file": "media/pmp/Magenta_tshirt_F_Alt.pmp",
+    "tags": ["Haut", "Rue", "Yab", "Lavabod", "Femme"]
+  },
+  {
+    "name": "T-shirt Magenta M",
+    "images": ["media/smiley_magenta.png"],
+    "file": "media/pmp/Magenta_tshirt_M.pmp",
+    "tags": ["Haut", "TBSE+", "Thicclanders+", "Homme"]
+  },
+  {
+    "name": "T-shirt Magenta HR3",
+    "images": ["media/smiley_magenta.png"],
+    "file": "media/pmp/Magenta_tshirt_M_HR3.pmp",
+    "tags": ["Haut", "HR3", "Homme"]
   }
 ]
